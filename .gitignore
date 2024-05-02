@@ -5,6 +5,9 @@
 # Prerequisites
 *.d
 
+# Dev files
+*.dev
+
 # Object files
 *.o
 *.ko
