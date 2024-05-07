@@ -1,7 +1,21 @@
 #ifndef ariq_H
 #define ariq_H
-
 #include "global.h"
+
+/* Variabel untuk menunjuk sebuah struktur queue */
+typedef struct QueueNode *addressQueueNode;
+typedef struct Queue *addressQueue;
+
+// Struktur data noda yeng ada pada queue
+typedef struct QueueNode {
+    addressTree data;
+    addressQueueNode next;
+} QueueNode;
+
+// Struktur queue
+typedef struct Queue {
+    addressQueueNode front, rear;
+} Queue;
 
 addressTree buatNodeTree (infotype data);
 /* Tujuan: Membuat dan menginisialisasi sebuah node baru dalam pohon.
