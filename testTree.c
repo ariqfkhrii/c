@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 	// Deklarasi
 	addressList P, Q;
 	addressTree rootTree;
-	
+		
 	// Buat dua link list
 	P = (addressList) malloc (sizeof (listTopik));
 	strcpy(P->topik, "Hewan");
