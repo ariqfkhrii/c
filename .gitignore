@@ -5,14 +5,8 @@
 # Prerequisites
 *.d
 
-# Win files
-*.win
-
 # Dev files
 *.dev
-
-# Layout files
-*.layout
 
 # Object files
 *.o
