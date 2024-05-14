@@ -4,5 +4,7 @@
 
 void playGame(addressTree Node);
 
+void menu();
+
 
 #endif
