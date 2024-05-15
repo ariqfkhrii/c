@@ -8,6 +8,12 @@
 # Dev files
 *.dev
 
+# Win files
+*.win
+
+# Layout files
+*.layout
+
 # Object files
 *.o
 *.ko
