@@ -3,7 +3,8 @@
 #include "global.h"
 
 
-void printAsciiArt();
+void printAsciiHeader();
+void printAsciiBanner():
 
 void printTreeHelper(addressTree node, int space, char* prefix);
 /* Tujuan: Membantu fungsi printTree untuk mencetak pohon dengan tanda '-' untuk subtree kiri dan '+' untuk subtree kanan.
