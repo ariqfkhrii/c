@@ -44,7 +44,8 @@ void BuatTopik(addressList *P) {
 
     // Menambahkan node ke dalam list
     if (*P == NULL) {
-        *P = newNode; 
+        *P = newNode;
+		first = *P; 
     } else {
         addressList temp = *P;
         while (temp->next != NULL) {
@@ -58,7 +59,7 @@ void BuatTopik(addressList *P) {
 }
 
 void simpantopik(addressList P) {
-    FILE *file = fopen("topik.txt", "w");  // Buka file untuk ditulis (overwrite)
+    FILE *file = fopen("topik.txt", "a");  // Buka file untuk ditulis (overwrite)
     if (file == NULL) {
         printf("Error: Gagal membuka file untuk ditulis.\n");
         return;
@@ -101,6 +102,7 @@ void bacadarifile(addressList *P) {
         // Menambahkan node ke dalam list
         if (*P == NULL) {
             *P = newNode; 
+            first = *P;
         } else {
             addressList temp = *P;
             while (temp->next != NULL) {
@@ -111,7 +113,6 @@ void bacadarifile(addressList *P) {
     }
 
     fclose(file);
-    printf("Data berhasil dibaca dari file topik.txt.\n");
 }
 
 // Fungsi untuk menampilkan daftar topik

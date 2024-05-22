@@ -24,6 +24,8 @@ typedef struct treeNode {
 	bool isJawaban;
 } Tree;
 
+addressList first;
+
 /* Variabel untuk iterasi */
 int i, j;
 

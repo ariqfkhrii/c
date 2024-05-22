@@ -9,7 +9,12 @@
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
 int main(int argc, char *argv[]) {
-	printf("Hello World!.\n");
+	addressList List = NULL;
+    addressTree rootTree;
+    addressTree root = NULL;
+    
+	bacadarifile(&List);
+	menuUser();
 	
 	return 0;
 }
