@@ -159,6 +159,7 @@ void menuUser() {
 
 void menuAdmin() {
     addressList List = NULL;
+    bacadarifile(&List);
     int pilihopsi = 0;
     char opsi[4][50] = {
         "Tambah Topik", 

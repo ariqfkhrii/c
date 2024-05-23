@@ -26,7 +26,7 @@ void BuatTopik(addressList *P) {
         
         // Memeriksa apakah topik sudah ada
         if (search(*P, judultopik) != NULL) {
-            printf("Error: Topik '%s' sudah ada. Silakan masukkan nama topik yang berbeda.\n", judultopik);
+            printf("Topik '%s' sudah ada.\nSilakan masukkan nama topik yang berbeda.\n", judultopik);
         } else {
             break;
         }
@@ -125,6 +125,12 @@ void TampilkanTopik(addressList P) {
         temp = temp->next;
         i++;
     }
+}
+
+void hapustopik(addressList *P){
+	char judultopik[100];
+	
+		
 }
 
 
