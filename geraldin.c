@@ -59,25 +59,22 @@ void BuatTopik(addressList *P) {
 }
 
 void simpantopik(addressList P) {
-    FILE *file = fopen("topik.txt", "a");  // Buka file untuk ditulis (overwrite)
+	//menggunakan mode w karena untuk menulis ulang isi dan memastikan seluruh topik tidak ada yang sama
+    FILE *file = fopen("topik.txt", "w");  
     if (file == NULL) {
         printf("Error: Gagal membuka file untuk ditulis.\n");
         return;
     }
-    // Simpan topik ke dalam file hanya jika belum ada
+
     addressList current = P;
     while (current != NULL) {
-        if (search(P, current->topik) == current) {
-            fprintf(file, "%s\n", current->topik);  // Menyimpan topik ke dalam file
-        }
+        fprintf(file, "%s\n", current->topik);  // Menyimpan topik ke dalam file
         current = current->next;
     }
 
     fclose(file);
     printf("Data berhasil disimpan ke dalam file topik.txt.\n");
 }
-
-
 
 void bacadarifile(addressList *P) {
     FILE *file = fopen("topik.txt", "r");
@@ -126,11 +123,4 @@ void TampilkanTopik(addressList P) {
         i++;
     }
 }
-
-void hapustopik(addressList *P){
-	char judultopik[100];
-	
-		
-}
-
 
