@@ -87,17 +87,17 @@ void pilihTopikDanCetakTree(addressList head) {
 }
 
 
-void freeTree(addressTree node) {
-    if (node == NULL) {
-        return;
+void deleteTree(addressTree *rootTree) {
+    if (*rootTree != NULL) {
+        // Hapus anak kiri
+        deleteTree(&((*rootTree)->left));
+        // Hapus anak kanan
+        deleteTree(&((*rootTree)->right));
+        // Hapus node saat ini
+        free(*rootTree);
+        // Atur referensi ke node saat ini menjadi NULL
+        *rootTree = NULL;
     }
-
-    // free subtree kiri dan kanan secara rekursif
-    freeTree(node->left);
-    freeTree(node->right);
-
-    // Free current node
-    free(node);
 }
 
 
