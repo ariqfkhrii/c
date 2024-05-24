@@ -23,7 +23,7 @@ void pilihTopikDanCetakTree(addressList head);
  * F.S.   : Topik telah dipilih oleh pengguna dan pohon yang sesuai dengan topik tersebut telah dicetak. */
 
 
-void freeTree(addressTree node);
+void deleteTree(addressTree *rootTree);
 
 
 #endif
