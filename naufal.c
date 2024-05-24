@@ -5,7 +5,6 @@
 #include <string.h>
 #include <conio.h>
 #include <stdbool.h>
-
 char jawaban;
 
 void playGame(addressTree Node) {
@@ -74,241 +73,184 @@ void caramain() {
     printf("8. Jika program gagal menebak, Anda bisa menambahkan pertanyaan dan jawaban baru untuk diperbaiki kecerdasannya.\n");
 }
 
-void menuUser() {
-    addressList List = NULL;
-    addressTree rootTree;
-    addressTree root = NULL;
+void editTree(addressList P) {
+    char nodeToEdit[100];
+    infotype newNodeData;
+    addressTree temp;
+    addressTree queue[100];
+    int front = -1, rear = -1;
 
-    int pilihopsi = 0;
-    char opsi[5][20] = {
-        "Play Now", 
-        "Cara Main", 
-        "Setting", 
-        "Exit"
-    }; 
-    int totalOpsi = 4;
-    char key;
+    if (P == NULL || P->root == NULL) {
+        printf("Pohon kosong. Tidak ada yang bisa diubah.\n");
+        return;
+    }
 
-    MainMenuUser:
-    while (1) {
-        system("cls");
-        printf("Mind Master \n");
-        for (int i = 0; i < totalOpsi; i++) {
-            if (i == pilihopsi) {
-                printf("-> ");
-            } else {
-                printf("   ");
-            }
-            printf("%s\n", opsi[i]);
-        }
+    printf("Masukkan data node yang ingin diedit: ");
+    fflush(stdin);
+    if (fgets(nodeToEdit, sizeof(nodeToEdit), stdin) == NULL) {
+        printf("Input tidak valid. Silahkan coba lagi.\n");
+        return;
+    }
+    nodeToEdit[strcspn(nodeToEdit, "\n")] = '\0';
 
-        key = getch();
+    queue[++rear] = P->root;
 
-        switch(key) {
-            case 72:
-                pilihopsi = (pilihopsi - 1 + totalOpsi) % totalOpsi;
-                break;
-            case 80: 
-                pilihopsi = (pilihopsi + 1) % totalOpsi;
-                break;
-            case 13:
-                switch(pilihopsi) {
-                    case 0:
-                        system("cls");
-                        int pilih;
-                        char jawaban;
-                        bacadarifile(&List);
-                        TampilkanTopik(List);
-                        printf("Masukkan topik yang anda inginkan: ");
-                        scanf("%d", &pilih);
-                        List = CariNodebyPilihan(pilih);
-                        lihatjawaban(List->root);
-                        printf("Pikirkan list jawaban yang ada! Saya akan mencoba untuk menebaknya! \n");
-                        printf("Play Now? (Y/N): ");
-                        scanf(" %c", &jawaban);
-                        if (jawaban == 'Y' || jawaban == 'y') {
-                            system("cls");
-                            playGame(List->root);
+    while (front < rear) {
+        temp = queue[++front];
+
+        if (temp != NULL) {
+            if (strcmp(temp->info, nodeToEdit) == 0) {
+                printf("Node ditemukan.\n");
+                
+                while (1) {
+                    printf("Masukkan data baru: ");
+                    fflush(stdin);
+                    if (fgets(newNodeData, sizeof(newNodeData), stdin) == NULL) {
+                        printf("Input tidak valid. Silahkan coba lagi.\n");
+                        continue;
+                    }
+                    newNodeData[strcspn(newNodeData, "\n")] = '\0';
+
+                    if (temp->isJawaban) {
+                        if (strchr(newNodeData, '?') != NULL) {
+                            printf("Node yang ingin diperbarui adalah jawaban, tidak boleh diisi dengan pertanyaan.\n");
+                        } else {
+                            break;
                         }
-                        break;
-                    case 1:
-                        caramain();
-                        printf("Kembali ke menu utama (Y/N)? ");
-                        scanf(" %c", &key);
-                        if (key == 'Y' || key == 'y') {
-                            goto MainMenuUser;
+                    } else {
+                        if (strchr(newNodeData, '?') == NULL) {
+                            printf("Node yang ingin diperbarui adalah pertanyaan, harus diisi dengan pertanyaan.\n");
+                        } else {
+                            break;
                         }
-                        break;
-                    case 2:
-                        menuAdmin();
-                        printf("Kembali ke menu utama (Y/N)? ");
-                        scanf(" %c", &key);
-                        if (key == 'Y' || key == 'y') {
-                            goto MainMenuUser;
-                        }
-                        break;
-                    case 3:
-                        printf("Terimakasih");
-                        exit(0);
-                        break;
+                    }
                 }
-                break;
+
+                strcpy(temp->info, newNodeData);
+                simpanTree(P);
+                printf("Node berhasil diubah.\n");
+                return;
+            }
+
+            if (temp->left != NULL) {
+                queue[++rear] = temp->left;
+            }
+            if (temp->right != NULL) {
+                queue[++rear] = temp->right;
+            }
+        }
+    }
+
+    printf("Node tidak ditemukan dalam pohon.\n");
+}
+
+void print_menu(int highlight, char *choices[], int n_choices) {
+    system("cls"); // Bersihkan layar (untuk Windows)
+    for(int i = 0; i < n_choices; ++i) {
+        if(highlight == i) {
+            printf("-> %s\n", choices[i]); // Highlight pilihan
+        } else {
+            printf("   %s\n", choices[i]);
         }
     }
 }
 
-void menuAdmin() {
-    addressList List = NULL;
-    bacadarifile(&List);
-    int pilihopsi = 0;
-    char opsi[4][50] = {
-        "Tambah Topik", 
-        "Hapus Topik", 
-        "Pilih Topik untuk CRUD Tree ", 
-        "Kembali ke menu utama"
-    }; 
-    int totalOpsi = 4;
-    char key;
+int menu_utama() {
+    int highlight = 0;
+    int choice = -1;
+    int c;
+    
+    char *choices[] = { 
+        "Mulai Bermain",
+        "Pengaturan",
+        "Cara Main",
+        "Keluar",
+    };
+    int n_choices = sizeof(choices) / sizeof(char*);
 
-    AdminMenu:
-    while (1) {
-        system("cls");
-        printf("Menu Setting \n");
-        for (int i = 0; i < totalOpsi; i++) {
-            if (i == pilihopsi) {
-                printf("-> ");
-            } else {
-                printf("   ");
+    print_menu(highlight, choices, n_choices);
+    while(1) {
+        c = _getch(); // Mengambil input
+        if(c == 0 || c == 224) {
+            // Arrow keys are two-byte sequences in Windows: 0 atau 224 diikuti oleh kode
+            switch(_getch()) {
+                case 72: // Arrow up
+                    if(highlight == 0)
+                        highlight = n_choices - 1;
+                    else
+                        --highlight;
+                    break;
+                case 80: // Arrow down
+                    if(highlight == n_choices - 1)
+                        highlight = 0;
+                    else 
+                        ++highlight;
+                    break;
+                default:
+                    break;
             }
-            printf("%s\n", opsi[i]);
-        }
-
-        key = getch();
-
-        switch(key) {
-            case 72:
-                pilihopsi = (pilihopsi - 1 + totalOpsi) % totalOpsi;
-                break;
-            case 80: 
-                pilihopsi = (pilihopsi + 1) % totalOpsi;
-                break;
-            case 13:
-                switch(pilihopsi) {
-                    case 0:
-                        system("cls");
-                        BuatTopik(&List);
-                        printf("Kembali ke menu utama (Y/N)? ");
-                        scanf(" %c", &key);
-                        if (key == 'Y' || key == 'y') {
-                            goto AdminMenu;
-                        }
-                        break;
-                    case 1:
-                        system("cls");
-                        printf("Hapus topik\n");
-                        // Add logic to handle topic deletion
-                        printf("Kembali ke menu utama (Y/N)? ");
-                        scanf(" %c", &key);
-                        if (key == 'Y' || key == 'y') {
-                            goto AdminMenu;
-                        }
-                        break;
-                    case 2:
-                        system("cls");
-                        int pilih;
-                        bacadarifile(&List);
-                        TampilkanTopik(List);
-                        printf("Masukkan topik yang anda inginkan: ");
-                        scanf("%d", &pilih);
-                        List = CariNodebyPilihan(pilih);
-                        handleTreeOptions(List);
-                        printf("Kembali ke menu utama (Y/N)? ");
-                        scanf(" %c", &key);
-                        if (key == 'Y' || key == 'y') {
-                            goto AdminMenu;
-                        }
-                        break;
-                    case 3:
-                        return;
-                }
-                break;
+            print_menu(highlight, choices, n_choices);
+        } else if(c == 13) { // Enter key
+            choice = highlight;
+            // Bersihkan baris tambahan di bawah menu
+            system("cls");
+            return choice;
         }
     }
 }
 
-void handleTreeOptions(addressList List) {
-    int pilihopsi = 0;
-    char opsi[6][30] = {
-        "Buat Tree", 
-        "Hapus Tree", 
-        "Tambah Node Tree", 
-        "Edit Tree", 
-        "Print Tree", 
-        "Kembali ke menu utama"
-    }; 
-    int totalOpsi = 6;
-    char key;
+int menu_pengaturan() {
+    int highlight = 0;
+    int choice = -1;
+    int c;
+    
+    char *choices[] = { 
+        "Tampilkan Topik",
+        "Tambah Topik",
+        "Hapus Topik",
+        "Membuat Pertanyaan dan Jawaban",
+        "Menghapus Pertanyaan dan Jawaban",
+        "Menambah Pertanyaan dan Jawaban",
+        "Mengubah Pertanyaan dan Jawaban",
+        "Lihat Pertanyaan dan Jawaban",
+        "Kembali ke Menu Utama",
+    };
+    int n_choices = sizeof(choices) / sizeof(char*);
 
-    while (1) {
-        system("cls");
-        printf("Menu Setting \n");
-        for (int i = 0; i < totalOpsi; i++) {
-            if (i == pilihopsi) {
-                printf("-> ");
-            } else {
-                printf("   ");
+    print_menu(highlight, choices, n_choices);
+    while(1) {
+        c = _getch(); // Mengambil input
+        if(c == 0 || c == 224) {
+            // Arrow keys are two-byte sequences in Windows: 0 atau 224 diikuti oleh kode
+            switch(_getch()) {
+                case 72: // Arrow up
+                    if(highlight == 0)
+                        highlight = n_choices - 1;
+                    else
+                        --highlight;
+                    break;
+                case 80: // Arrow down
+                    if(highlight == n_choices - 1)
+                        highlight = 0;
+                    else 
+                        ++highlight;
+                    break;
+                default:
+                    break;
             }
-            printf("%s\n", opsi[i]);
-        }
-
-        key = getch();
-
-        switch(key) {
-            case 72:
-                pilihopsi = (pilihopsi - 1 + totalOpsi) % totalOpsi;
-                break;
-            case 80: 
-                pilihopsi = (pilihopsi + 1) % totalOpsi;
-                break;
-            case 13:
-                switch(pilihopsi) {
-                    case 0:
-                        system("cls");
-                        buatTree(List);
-                        break;
-                    case 1:
-                        system("cls");
-                        printf("Hapus tree\n");
-                        // Add logic to handle tree deletion
-                        break;
-                    case 2:
-                        system("cls");
-                        buatTree(List);
-                        break;
-                    case 3:
-                        system("cls");
-                        printf("Edit tree\n");
-                        // Add logic to handle tree editing
-                        break;
-                    case 4:
-                        system("cls");
-                        printf("Print Tree\n");
-                        printTree(List->root);
-                        // Add logic to handle tree printing
-                        break;
-                    case 5:
-                        return;
-                }
-                break;
+            print_menu(highlight, choices, n_choices);
+        } else if(c == 13) { // Enter key
+            choice = highlight;
+            // Bersihkan baris tambahan di bawah menu
+            system("cls");
+            return choice;
         }
     }
 }
 
-//void editTree(addressTree rootTree){
-//	if (rootTree == NULL){
-//		printf("Maaf tree saat ini kosong, tidak dapat diedit!\n");
-//		return;
-//	}
-//
-//	
-//}
+void keluar() {
+    system("cls");
+    printf("Keluar dari program...\n");
+    // Logika untuk keluar
+    printf("Terima kasih telah bermain!\n");
+}

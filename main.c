@@ -5,16 +5,143 @@
 #include "naufal.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 
-/* run this program using the console pauser or add your own getch, system("pause") or input loop */
-
-int main(int argc, char *argv[]) {
+int main() {
 	addressList List = NULL;
-    addressTree rootTree;
-    addressTree root = NULL;
-    
-	bacadarifile(&List);
-	menuUser();
+	addressTree rootTree;
+	int pilihan, pilihanPengaturan;
+	bool kembali;
+	int pilih;
+    char jawaban;
 	
-	return 0;
+	addressList trav = first;
+    bacadarifile(&List);
+	while (trav != NULL){
+		bacaFileTree(trav); 
+		trav = trav->next;
+	}
+	
+    while(1) {
+        pilihan = menu_utama();
+        switch(pilihan) {
+            case 0:
+                system("cls");
+                TampilkanTopik(List);
+                printf("Masukkan topik yang anda inginkan: ");
+                scanf("%d", &pilih);
+                List = CariNodebyPilihan(pilih);
+                printf("Lihat Jawaban? (Y/N)");
+                scanf(" %c", &jawaban);
+                if (jawaban == 'Y' || jawaban == 'y') {
+                    bacaFileTree(List); 
+                    lihatjawaban(List->root);
+                }
+                printf("Pikirkan list jawaban yang ada! Saya akan mencoba untuk menebaknya! \n");
+                printf("Play Now? (Y/N): ");
+                scanf(" %c", &jawaban);
+                    if (jawaban == 'Y' || jawaban == 'y') {
+                        bacaFileTree(List); 
+                        playGame(List->root);
+                    }
+                system("pause");
+                break;
+            case 1: 
+			{
+            	kembali = false;
+            	while(!kembali) {
+	                pilihanPengaturan = menu_pengaturan();
+	                switch(pilihanPengaturan) {
+	                    case 0:
+	                    	//Lihat topik
+	                        TampilkanTopik(List);
+	                        system("pause");
+	                        break;
+	                    case 1:
+	                    	//Buat Topik
+	                        BuatTopik(&List);
+	                        system("pause");
+	                        break;
+	                    case 2:
+	                        //hapus_topik();
+	                        break;
+	                    case 3:
+	                    	//buat tree
+	                    	system("cls");
+			                TampilkanTopik(List);
+			                printf("Masukkan topik yang anda inginkan: ");
+			                scanf("%d", &pilih);
+              				List = CariNodebyPilihan(pilih);
+              				if (List->root != NULL){
+              					printf("Mohon maaf Tree sudah terisi!\n");
+              					system("pause");
+              					break;
+							}
+	                        buatTree(List);
+                        	simpanTree(List);
+                        	system("pause");
+	                        break;
+	                    case 4:
+	                        //menghapus_pertanyaan_jawaban();
+	                        system("pause");
+	                        break;
+	                    case 5:
+	                    	//buat node 
+	                    	system("cls");
+			                TampilkanTopik(List);
+			                printf("Masukkan topik yang anda inginkan: ");
+			                scanf("%d", &pilih);
+              				List = CariNodebyPilihan(pilih);
+	                    	bacaFileTree(List);
+	                        verifikasiJawaban(List->root);
+	                        buatTree(List);
+	                        kategoriJawaban(List->root);
+	                        simpanTree(List);
+	                        system("pause");
+	                        break;
+	                    case 6:
+	                    	//edit tree
+	                    	system("cls");
+			                TampilkanTopik(List);
+			                printf("Masukkan topik yang anda inginkan: ");
+			                scanf("%d", &pilih);
+              				List = CariNodebyPilihan(pilih);
+	                    	bacaFileTree(List);
+			            	editTree(List);
+			            	simpanTree(List);
+	                        system("pause");
+	                        break;
+	                    case 7:
+	                    	//print tree
+	                    	system("cls");
+	                        TampilkanTopik(List);
+			                printf("Masukkan topik yang anda inginkan: ");
+			                scanf("%d", &pilih);
+              				List = CariNodebyPilihan(pilih);
+	                    	bacaFileTree(List);
+	                        printTree(List->root);
+	                        system("pause");
+	                        break;
+	                    case 8:
+	                    	kembali = true; // Kembali ke menu utama
+	                    	break;
+	                    default:
+	                        break;
+	                }
+	            }
+	            break;
+            }
+            case 2:
+            	//cara main
+                caramain();
+                system("pause");
+                break;
+            case 3:
+            	printf("Terimakasih");
+                return 0;
+            default:
+                break;
+        }
+    }
+    return 0;
 }

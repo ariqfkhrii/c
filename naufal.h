@@ -4,9 +4,11 @@
 
 void playGame(addressTree Node);
 void lihatjawaban(addressTree rootTree);
-void menuUser();
-void menuAdmin();
 void caramain();
-
+void print_menu(int highlight, char *choices[], int n_choices);
+void editTree(addressList P);
+int menu_utama();
+int menu_pengaturan();
+void keluar();
 
 #endif

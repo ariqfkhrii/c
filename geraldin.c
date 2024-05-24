@@ -26,7 +26,7 @@ void BuatTopik(addressList *P) {
         
         // Memeriksa apakah topik sudah ada
         if (search(*P, judultopik) != NULL) {
-            printf("Topik '%s' sudah ada.\nSilakan masukkan nama topik yang berbeda.\n", judultopik);
+            printf("Error: Topik '%s' sudah ada. Silakan masukkan nama topik yang berbeda.\n", judultopik);
         } else {
             break;
         }
@@ -59,22 +59,25 @@ void BuatTopik(addressList *P) {
 }
 
 void simpantopik(addressList P) {
-	//menggunakan mode w karena untuk menulis ulang isi dan memastikan seluruh topik tidak ada yang sama
-    FILE *file = fopen("topik.txt", "w");  
+    FILE *file = fopen("topik.txt", "a");  // Buka file untuk ditulis (overwrite)
     if (file == NULL) {
         printf("Error: Gagal membuka file untuk ditulis.\n");
         return;
     }
-
+    // Simpan topik ke dalam file hanya jika belum ada
     addressList current = P;
     while (current != NULL) {
-        fprintf(file, "%s\n", current->topik);  // Menyimpan topik ke dalam file
+        if (search(P, current->topik) == current) {
+            fprintf(file, "%s\n", current->topik);  // Menyimpan topik ke dalam file
+        }
         current = current->next;
     }
 
     fclose(file);
     printf("Data berhasil disimpan ke dalam file topik.txt.\n");
 }
+
+
 
 void bacadarifile(addressList *P) {
     FILE *file = fopen("topik.txt", "r");
@@ -123,4 +126,5 @@ void TampilkanTopik(addressList P) {
         i++;
     }
 }
+
 
