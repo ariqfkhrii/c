@@ -16,15 +16,13 @@ addressList search(addressList topik, char *judul) {
 }
 
 
-void BuatTopik(addressList *P) {
+void BuatTopik(addressList *P, addressList *first) {
     char judultopik[50];
     do {
         printf("Masukkan nama topik baru: ");
-        fflush(stdin);
         fgets(judultopik, sizeof(judultopik), stdin);
-        judultopik[strcspn(judultopik, "\n")] = '\0'; // Menghilangkan newline dari input
+        judultopik[strcspn(judultopik, "\n")] = '\0';
         
-        // Memeriksa apakah topik sudah ada
         if (search(*P, judultopik) != NULL) {
             printf("Error: Topik '%s' sudah ada. Silakan masukkan nama topik yang berbeda.\n", judultopik);
         } else {
@@ -32,7 +30,6 @@ void BuatTopik(addressList *P) {
         }
     } while (1);
 
-    // Membuat node baru untuk topik
     addressList newNode = (addressList)malloc(sizeof(listTopik));
     if (newNode == NULL) {
         printf("Error: Alokasi memori gagal.\n");
@@ -42,10 +39,9 @@ void BuatTopik(addressList *P) {
     newNode->next = NULL;
     newNode->root = NULL;
 
-    // Menambahkan node ke dalam list
     if (*P == NULL) {
         *P = newNode;
-		first = *P; 
+        *first = *P;
     } else {
         addressList temp = *P;
         while (temp->next != NULL) {
@@ -57,6 +53,7 @@ void BuatTopik(addressList *P) {
     printf("Topik baru '%s' telah berhasil dibuat.\n", judultopik);
     simpantopik(*P);
 }
+
 
 void simpantopik(addressList P) {
     FILE *file = fopen("topik.txt", "a");  // Buka file untuk ditulis (overwrite)
@@ -77,9 +74,7 @@ void simpantopik(addressList P) {
     printf("Data berhasil disimpan ke dalam file topik.txt.\n");
 }
 
-
-
-void bacadarifile(addressList *P) {
+void bacadarifile(addressList *P, addressList *first) {
     FILE *file = fopen("topik.txt", "r");
     if (file == NULL) {
         printf("Error: Gagal membuka file untuk dibaca.\n");
@@ -88,7 +83,7 @@ void bacadarifile(addressList *P) {
 
     char judultopik[50];
     while (fgets(judultopik, sizeof(judultopik), file) != NULL) {
-        judultopik[strcspn(judultopik, "\n")] = '\0'; // Menghilangkan newline dari input
+        judultopik[strcspn(judultopik, "\n")] = '\0';
         addressList newNode = (addressList)malloc(sizeof(listTopik));
         if (newNode == NULL) {
             printf("Error: Alokasi memori gagal.\n");
@@ -99,10 +94,9 @@ void bacadarifile(addressList *P) {
         newNode->next = NULL;
         newNode->root = NULL;
 
-        // Menambahkan node ke dalam list
         if (*P == NULL) {
             *P = newNode; 
-            first = *P;
+            *first = *P;
         } else {
             addressList temp = *P;
             while (temp->next != NULL) {

@@ -30,7 +30,7 @@ void playGame(addressTree Node) {
     }
 }
 
-addressList CariNodebyPilihan(int pilih){
+addressList CariNodebyPilihan(int pilih, addressList first){
 	i = 1;
 	addressList Trav;
 	bool found = false;
