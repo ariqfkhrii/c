@@ -489,15 +489,7 @@ void bacaFileTree(addressList P)
     
     // Membuka file untuk dibaca
     FILE *file = fopen(filepath, "r");
-    
-    // Memeriksa apakah file berhasil dibuka
-    if (file == NULL) 
-	{
-        system("cls");
-        printf("Gagal membaca file.\n");
-        exit(1);
-    }
-    
+        
     // Membaca setiap baris pada file
     while (fscanf(file, "%[^\n]\n", data) == 1) 
 	{
@@ -510,7 +502,6 @@ void bacaFileTree(addressList P)
     // Menutup file setelah selesai membaca
     fclose(file);
 }
-
 
 void traversalInOrder(addressTree rootTree) {
     if (rootTree != NULL) {

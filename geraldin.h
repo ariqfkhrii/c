@@ -2,10 +2,12 @@
 #define GERALDIN_H
 #include "global.h"
 
-void BuatTopik(addressList *P, addressList *first);
-void TampilkanTopik(addressList P);
-void simpantopik(addressList P);
-void bacadarifile(addressList *P, addressList *first);
 addressList search(addressList topik, char *judul);
+void simpantopik(addressList P);
+void BuatTopik(addressList *P, addressList *first);
+void bacadarifile(addressList *P, addressList *first);
+void TampilkanTopik(addressList P);
+void hapusTopik(addressList *P, addressList *first);
+
 
 #endif
