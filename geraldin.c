@@ -14,23 +14,6 @@ addressList search(addressList topik, char *judul) {
     return NULL;
 }
 
-void simpantopik(addressList P) {
-    FILE *file = fopen("topik.txt", "w"); // Buka file untuk ditulis (overwrite)
-    if (file == NULL) {
-        printf("Error: Gagal membuka file untuk ditulis.\n");
-        return;
-    }
-
-    addressList current = P;
-    while (current != NULL) {
-        fprintf(file, "%s\n", current->topik); // Menyimpan topik ke dalam file
-        current = current->next;
-    }
-
-    fclose(file);
-    printf("Data berhasil disimpan ke dalam file topik.txt.\n");
-}
-
 void BuatTopik(addressList *P, addressList *first) {
     char judultopik[50];
     printf("Masukkan judul topik baru: ");
@@ -66,6 +49,23 @@ void BuatTopik(addressList *P, addressList *first) {
 
     printf("Topik baru '%s' telah berhasil dibuat.\n", judultopik);
     simpantopik(*P);
+}
+
+void simpantopik(addressList P) {
+    FILE *file = fopen("topik.txt", "w"); // Buka file untuk ditulis (overwrite)
+    if (file == NULL) {
+        printf("Error: Gagal membuka file untuk ditulis.\n");
+        return;
+    }
+
+    addressList current = P;
+    while (current != NULL) {
+        fprintf(file, "%s\n", current->topik); // Menyimpan topik ke dalam file
+        current = current->next;
+    }
+
+    fclose(file);
+    printf("Data berhasil disimpan ke dalam file topik.txt.\n");
 }
 
 void bacadarifile(addressList *P, addressList *first) {
@@ -105,11 +105,17 @@ void bacadarifile(addressList *P, addressList *first) {
 
 // Fungsi untuk menampilkan daftar topik
 void TampilkanTopik(addressList P) {
-    printf("Daftar Topik:\n");
+    int y = 8; // Mulai dari baris 5 atau sesuaikan sesuai keinginan
+
+    printCentered("Daftar Topik:", y);
+    y += 1; // Tambah jarak antar baris
     addressList temp = P;
     int i = 1;
     while (temp != NULL) {
-        printf("%d. %s\n", i, temp->topik);
+    	char buffer[100];
+        sprintf(buffer, "%d. %s", i, temp->topik);
+        printCentered(buffer, y);
+        y++;
         temp = temp->next;
         i++;
     }

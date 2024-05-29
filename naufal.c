@@ -5,6 +5,7 @@
 #include <string.h>
 #include <conio.h>
 #include <stdbool.h>
+#include <windows.h> 
 char jawaban;
 
 void playGame(addressTree Node) {
@@ -12,21 +13,48 @@ void playGame(addressTree Node) {
         printf("Pohon tidak tersedia. Silakan buat pohon terlebih dahulu.\n");
         return;
     }
-
-    printf("%s\n", Node->info);
-
-    char jawaban[2];
+    
     if (Node->left != NULL) {
-        printf("Jawab (y/n): ");
-        scanf("%s", jawaban);
-        printf("\n");
-        if (jawaban[0] == 'y' || jawaban[0] == 'Y') {
-            playGame(Node->left);
-        } else if (jawaban[0] == 'n' || jawaban[0] == 'N') {
-            playGame(Node->right);
-        } else {
-            printf("Input tidak valid.\n");
+        int highlight = 0;
+        int choice = -1;
+        int c;
+
+        char *choices[] = { "Ya", "Tidak" };
+        int n_choices = sizeof(choices) / sizeof(char*);
+        
+        while(1) {
+            print_menuPlay(highlight, choices, n_choices);
+            printCentered(Node->info, 24);
+            c = _getch();
+            if (c == 0 || c == 224) {
+                // Handle arrow keys
+                switch (_getch()) {
+                    case 72: // Arrow up
+                    case 75: // Arrow left
+                        highlight = (highlight == 0) ? n_choices - 1 : highlight - 1;
+                        break;
+                    case 80: // Arrow down
+                    case 77: // Arrow right
+                        highlight = (highlight == n_choices - 1) ? 0 : highlight + 1;
+                        break;
+                    default:
+                        break;
+                }
+            } else if (c == 13) { // Enter key
+                choice = highlight;
+                break;
+            }
         }
+
+        if (choice == 0) { // Ya
+            playGame(Node->left);
+        } else if (choice == 1) { // Tidak
+            playGame(Node->right);
+        }
+    } else {
+        system("cls"); // Clear the screen
+        printCentered("Apakah yang anda pikirkan itu %s?\n",Node->info);
+        _getch(); // Wait for user input
     }
 }
 
@@ -59,7 +87,6 @@ void lihatjawaban(addressTree rootTree){
 		lihatjawaban(rootTree->right);
 	}
 }
-
 void caramain() {
 	system("cls");
     printf("------Cara Main Mind-Master-------\n");
@@ -143,17 +170,79 @@ void editTree(addressList P) {
 
     printf("Node tidak ditemukan dalam pohon.\n");
 }
+void gotoxy(int x, int y) {
+    COORD coord;
+    coord.X = x;
+    coord.Y = y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+// Fungsi untuk mendapatkan ukuran layar konsol
+void getConsoleSize(int *columns, int *rows) {
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    *columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    *rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+}
+
+// Fungsi untuk menampilkan teks di tengah layar
+void printCentered(const char *text, int y) {
+    int columns, rows;
+    getConsoleSize(&columns, &rows);
+    int x = (columns - strlen(text)) / 2;
+    gotoxy(x, y);
+    printf("%s", text);
+}
+
+void scanCentered(const char *prompt, char *format, void *var, int y) {
+    int columns, rows;
+    getConsoleSize(&columns, &rows);
+    int x = (columns - strlen(prompt)) / 2;
+    gotoxy(x, y);
+    printf("%s", prompt);
+    gotoxy(x + strlen(prompt), y);
+    scanf(format, var);
+}
 
 void print_menu(int highlight, char *choices[], int n_choices) {
-    system("cls"); // Bersihkan layar (untuk Windows)
+	system("cls");
+	printAsciiArt();
+	int columns, rows;
+    getConsoleSize(&columns, &rows);
+
     for(int i = 0; i < n_choices; ++i) {
-        if(highlight == i) {
-            printf("-> %s\n", choices[i]); // Highlight pilihan
+        int x = (columns - strlen(choices[i])) / 2;
+        int y = (rows / 2 - n_choices / 2) + i;
+        gotoxy(x, y);
+        
+        if (highlight == i) {
+            printf(" -> %s", choices[i]); // Highlighted menu item
         } else {
-            printf("   %s\n", choices[i]);
+            printf("   %s   ", choices[i]);
         }
     }
 }
+
+void print_menuPlay(int highlight, char *choices[], int n_choices) {
+	system("cls");
+	printAsciiBanner();
+	int columns, rows;
+    getConsoleSize(&columns, &rows);
+
+    for(int i = 0; i < n_choices; ++i) {
+        int x = (columns - strlen(choices[i])) / 2;
+        int y = (rows / 2 - n_choices / 2) + i;
+        gotoxy(x, y);
+        
+        if (highlight == i) {
+            printf(" -> %s", choices[i]); // Highlighted menu item
+        } else {
+            printf("   %s   ", choices[i]);
+        }
+    }
+}
+
+
 
 int menu_utama() {
     int highlight = 0;
@@ -161,13 +250,15 @@ int menu_utama() {
     int c;
     
     char *choices[] = { 
+    	"----------------",
         "Mulai Bermain",
         "Pengaturan",
         "Cara Main",
         "Keluar",
+        "---------------"
     };
     int n_choices = sizeof(choices) / sizeof(char*);
-
+    
     print_menu(highlight, choices, n_choices);
     while(1) {
         c = _getch(); // Mengambil input
@@ -241,7 +332,6 @@ int menu_pengaturan() {
             print_menu(highlight, choices, n_choices);
         } else if(c == 13) { // Enter key
             choice = highlight;
-            // Bersihkan baris tambahan di bawah menu
             system("cls");
             return choice;
         }
@@ -251,6 +341,5 @@ int menu_pengaturan() {
 void keluar() {
     system("cls");
     printf("Keluar dari program...\n");
-    // Logika untuk keluar
     printf("Terima kasih telah bermain!\n");
 }

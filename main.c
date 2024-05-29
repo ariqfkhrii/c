@@ -32,20 +32,18 @@ int main()
             case 0:
                 system("cls");
                 TampilkanTopik(List);
-                printf("Masukkan topik yang anda inginkan: ");
-                scanf("%d", &pilih);
+                scanCentered("Masukkan topik yang anda inginkan: ", "%d", &pilih, 12);
                 List = CariNodebyPilihan(pilih, first);
-                printf("Lihat Jawaban? (Y/N)");
-                scanf(" %c", &jawaban);
-                if (jawaban == 'Y' || jawaban == 'y') {
+                scanCentered("Lihat Jawaban? (Y/N)", " %c", &jawaban, 14);
+                if (jawaban == 'Y' || jawaban == 'y') { 
                     lihatjawaban(List->root);
                 }
-                printf("Pikirkan list jawaban yang ada! Saya akan mencoba untuk menebaknya! \n");
-                printf("Play Now? (Y/N): ");
-                scanf(" %c", &jawaban);
-                    if (jawaban == 'Y' || jawaban == 'y') {
-                        playGame(List->root);
-                    }
+                printCentered("Pikirkan list jawaban yang ada! Saya akan mencoba untuk menebaknya!", 18);
+                scanCentered("Play Now? (Y/N): ", " %c", &jawaban, 19);
+                if (jawaban == 'Y' || jawaban == 'y') {
+                	system("cls");
+                    playGame(List->root);
+                }
                 system("pause");
                 break;
             case 1: 
@@ -75,11 +73,12 @@ int main()
                             // buat tree
                             system("cls");
                             TampilkanTopik(List);
-                            printf("Masukkan topik yang anda inginkan: ");
+                            printCentered("Masukkan topik yang anda inginkan: ", 12);
+                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
                             scanf("%d", &pilih);
                             List = CariNodebyPilihan(pilih, first);
                             if (List->root != NULL){
-                                printf("Mohon maaf Tree sudah terisi!\n");
+                                printCentered("Mohon maaf Tree sudah terisi!", 15);
                                 system("pause");
                                 break;
                             }
@@ -95,7 +94,8 @@ int main()
                             // buat node 
                             system("cls");
                             TampilkanTopik(List);
-                            printf("Masukkan topik yang anda inginkan: ");
+                            printCentered("Masukkan topik yang anda inginkan: ", 12);
+                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
                             scanf("%d", &pilih);
                             List = CariNodebyPilihan(pilih, first);
                             verifikasiJawaban(List->root);
@@ -108,7 +108,8 @@ int main()
                             // edit tree
                             system("cls");
                             TampilkanTopik(List);
-                            printf("Masukkan topik yang anda inginkan: ");
+                            printCentered("Masukkan topik yang anda inginkan: ", 12);
+                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
                             scanf("%d", &pilih);
                             List = CariNodebyPilihan(pilih, first);
                             editTree(List);
@@ -119,7 +120,8 @@ int main()
                             // print tree
                             system("cls");
                             TampilkanTopik(List);
-                            printf("Masukkan topik yang anda inginkan: ");
+                            printCentered("Masukkan topik yang anda inginkan: ", 12);
+                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
                             scanf("%d", &pilih);
                             List = CariNodebyPilihan(pilih, first);
                             printTree(List->root);
@@ -140,7 +142,7 @@ int main()
                 system("pause");
                 break;
             case 3:
-                printf("Terimakasih");
+                printCentered("Terimakasih", 12);
                 return 0;
             default:
                 break;

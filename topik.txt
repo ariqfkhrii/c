@@ -1,1 +1,3 @@
-buah
+Hewan
+Buah
+sepeda
