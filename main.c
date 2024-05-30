@@ -87,7 +87,15 @@ int main()
                             system("pause");
                             break;
                         case 4:
-                            // menghapus_pertanyaan_jawaban();
+                            // menghapus_pertanyaan_jawaban
+                            system("cls");
+                            printAsciiArt();
+                            TampilkanTopik(List,first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
+                            scanf("%d", &pilih);
+                            List = CariNodebyPilihan(pilih, first);
+                            deleteTree(&(List->root));
+                            deleteFile(List);
                             system("pause");
                             break;
                         case 5:
@@ -119,12 +127,13 @@ int main()
                         case 7:
                             // print tree
                             system("cls");
-                            TampilkanTopik(List);
-                            printCentered("Masukkan topik yang anda inginkan: ", 12);
-                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
+                            printAsciiArt();
+                            TampilkanTopik(List,first);
+                            printf("\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
                             scanf("%d", &pilih);
                             List = CariNodebyPilihan(pilih, first);
                             printTree(List->root);
+                            printTreeToFile(List->root, "Output.txt");
                             system("pause");
                             break;
                         case 8:

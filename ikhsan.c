@@ -6,7 +6,7 @@
 #include <string.h>
 
 
-void printTreeHelper(addressTree node, int space, char* prefix) {
+void printTreeHelper(FILE *file, addressTree node, int space, char* prefix) {
     int COUNT = 25; // Space between levels
     if (node == NULL) {
         return;
@@ -14,77 +14,93 @@ void printTreeHelper(addressTree node, int space, char* prefix) {
 
     space += COUNT;
 
-    printTreeHelper(node->right, space, "+");
+    printTreeHelper(file, node->right, space, "+");
 
-    printf("\n");
+    fprintf(file, "\n");
     for (int i = COUNT; i < space; i++) {
-        printf(" ");
+        fprintf(file, " ");
     }
 
     if (space == COUNT) {
-        printf("[Root] ");
+        fprintf(file, "[Root] ");
     }
 
-    printf("%s%s\n", prefix, node->info);
+    fprintf(file, "%s%s\n", prefix, node->info);
 
-    // Menampilkan subtree kiri dengan tanda "-"
     if (node->left != NULL) {
-        printTreeHelper(node->left, space, "-");
+        printTreeHelper(file, node->left, space, "-");
     }
 }
 
-void printTree(addressTree rootTree) {
-    printTreeHelper(rootTree, 0, "");
+// Function to print tree structure to a file
+void printTreeToFile(addressTree rootTree, const char* fileName) {
+    FILE *file = fopen(fileName, "w");
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    printTreeHelper(file, rootTree, 0, "");
+    fclose(file);
 }
 
+// Function to print tree structure to CLI
+void printTreeHelperCLI(addressTree node, int level, int isLast, int *path) {
+    if (node == NULL) {
+        return;
+    }
 
-
-void pilihTopikDanCetakTree(addressList head) {
-    while (1) {
-        addressList current = head;
-        int count = 0;
-        int choice = -1;
-
-        // Menampilkan daftar topik
-        printf("\nDaftar Topik:\n");
-        while (current != NULL) {
-            printf("%d. %s\n", ++count, current->topik);
-            current = current->next;
-        }
-
-        // Meminta pengguna memilih topik
-        printf("Pilih topik yang ingin dicetak tree-nya (masukkan nomor, 0 untuk keluar): ");
-        scanf("%d", &choice);
-
-        // Keluar dari loop jika pengguna memilih 0
-        if (choice == 0) {
-            break;
-        }
-
-        // Validasi pilihan
-        if (choice < 1 || choice > count) {
-            printf("Pilihan tidak valid.\n");
-            continue;
-        }
-
-        // Reset current ke head dan iterasi untuk menemukan topik yang dipilih
-        current = head;
-        count = 1;
-        while (current != NULL && count < choice) {
-            current = current->next;
-            count++;
-        }
-
-        // Cetak tree dari topik yang dipilih
-        if (current != NULL) {
-            printf("Tree untuk topik: %s\n", current->topik);
-            printf("'+' untuk subtree kanan\n '-' untuk subtree kiri\n\n\n");
-            printTree(current->root);
+    // Print indentation for the current level
+    for (int i = 0; i < level - 1; i++) {
+        if (path[i]) {
+            printf("|   ");
         } else {
-            printf("Topik tidak ditemukan.\n");
+            printf("    ");
         }
     }
+
+    if (level > 0) {
+        if (isLast) {
+            printf("`-- ");
+        } else {
+            printf("|-- ");
+        }
+    }
+
+    // Print the question or answer
+    printf("%s\n", node->info);
+
+    // Mark this node as visited in the path
+    path[level - 1] = !isLast;
+
+    // Print the left subtree
+    if (node->left || node->right) {
+        path[level] = 1;  // Ensure the next level gets a vertical line if there are more siblings
+    }
+    printTreeHelperCLI(node->left, level + 1, node->right == NULL, path);
+
+    // Print the right subtree
+    printTreeHelperCLI(node->right, level + 1, 1, path);
 }
+
+// Function to print tree structure to CLI
+void printTree(addressTree rootTree) {
+    if (rootTree == NULL) {
+        printf("Tree is empty.\n");
+        return;
+    }
+
+    // Create a path array to track where to print '|'
+    int path[1000] = {0};
+
+    // Print the root node
+    printf("%s\n", rootTree->info);
+
+    // Call printTreeHelperCLI for subtrees
+    printTreeHelperCLI(rootTree->left, 1, 0, path);
+    printTreeHelperCLI(rootTree->right, 1, 1, path);
+}
+
 
 
 void deleteTree(addressTree *rootTree) {
@@ -102,21 +118,26 @@ void deleteTree(addressTree *rootTree) {
 
 
 void printAsciiArt() {
+	setTextColor(15, 0);  
     const char *asciiArt[] = {
-        " __   __  ___   __    _  ______     __   __  _______  _______  _______  _______  ______  ",
-        "|  |_|  ||   | |  |  | ||      |   |  |_|  ||   _   ||       ||       ||       ||    _ | ",
-        "|       ||   | |   |_| ||  _    |  |       ||  |_|  ||  _____||_     _||    ___||   | || ",
-        "|       ||   | |       || | |   |  |       ||       || |_____   |   |  |   |___ |   |_|| ",
-        "|       ||   | |  _    || |_|   |  |       ||       ||_____  |  |   |  |    ___||    __ |",
-        "| ||_|| ||   | | | |   ||       |  | ||_|| ||   _   | _____| |  |   |  |   |___ |   |  ||",
-        "|_|   |_||___| |_|  |__||______|   |_|   |_||__| |__||_______|  |___|  |_______||___|  ||",
+        "███╗░░░███╗██╗███╗░░██╗██████╗░  ███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░",
+        "████╗░████║██║████╗░██║██╔══██╗  ████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗",
+        "██╔████╔██║██║██╔██╗██║██║░░██║  ██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝",
+        "██║╚██╔╝██║██║██║╚████║██║░░██║  ██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗",
+        "██║░╚═╝░██║██║██║░╚███║██████╔╝  ██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║",
+        "╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░  ╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝",
         NULL
     };
 
     int columns, rows;
     getConsoleSize(&columns, &rows);
+    int artHeight = 0;
+    for (int i = 0; asciiArt[i] != NULL; i++) {
+        artHeight++;
+    }
 
-    int startY = 13; // Starting Y position for the ASCII art
+    int startY = (rows - artHeight) / 3;
+    if (startY < 0) startY = 0; // Pastikan tidak negatif
 
     for (int i = 0; asciiArt[i] != NULL; i++) {
         printCentered(asciiArt[i], startY + i);
