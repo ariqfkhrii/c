@@ -10,6 +10,7 @@
 
 int main() 
 {
+	system("chcp 65001");
     addressList List = NULL, first = NULL, trav = NULL;
     addressTree rootTree;
     int pilihan, pilihanPengaturan;
@@ -31,19 +32,38 @@ int main()
         switch(pilihan) {
             case 0:
                 system("cls");
-                TampilkanTopik(List);
-                scanCentered("Masukkan topik yang anda inginkan: ", "%d", &pilih, 12);
+                printAsciiArt();
+                TampilkanTopik(List, first);
+                printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
+                printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
+                scanf("%d", &pilih);
+                if (pilih == 0)
+                {
+                	break;
+				}
                 List = CariNodebyPilihan(pilih, first);
-                scanCentered("Lihat Jawaban? (Y/N)", " %c", &jawaban, 14);
-                if (jawaban == 'Y' || jawaban == 'y') { 
-                    lihatjawaban(List->root);
-                }
-                printCentered("Pikirkan list jawaban yang ada! Saya akan mencoba untuk menebaknya!", 18);
-                scanCentered("Play Now? (Y/N): ", " %c", &jawaban, 19);
+                if (List == NULL)
+                {
+                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+                	system("pause");
+                	break;
+				}
+                printf("\t\t\t\t\t\t\t\t\t\t\tLihat list jawaban : (Y/N)");
+                scanf(" %c", &jawaban);
                 if (jawaban == 'Y' || jawaban == 'y') {
-                	system("cls");
-                    playGame(List->root);
+                	printf("\n\n\t\t\t\t\t\t\t\t\t\t\t----------------Daftar List---------------\n");
+                    lihatjawaban(List->root);
+                    printf("\n\t\t\t\t\t\t\t\t\t\t\tPikirkan satu jawaban yang ada!\n");
+                	printf("\t\t\t\t\t\t\t\t\t\t\tSaya akan mencoba untuk menebaknya! \n");
                 }
+                printf("\t\t\t\t\t\t\t\t\t\t\tPlay Now? (Y/N): ");
+                scanf(" %c", &jawaban);
+                    if (jawaban == 'Y' || jawaban == 'y') {
+                    	system("cls");
+                    	printAsciiBanner();
+                        playGame(List->root);
+                    }
+                printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                 system("pause");
                 break;
             case 1: 
@@ -54,74 +74,148 @@ int main()
                     switch(pilihanPengaturan) {
                         case 0:
                             // Lihat topik
-                            TampilkanTopik(List);
+                            printAsciiArt();
+                            TampilkanTopik(List, first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 1:
                             // Buat Topik
+                            printAsciiArt();
+                            TampilkanTopik(List, first);
                             BuatTopik(&List, &first);
+                            simpantopik(first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 2:
-                            // Hapus Topik
-                            system("cls");
-                            TampilkanTopik(List);
-                            hapusTopik(&List, &first);
-                            system("pause");
+						    // Hapus Topik
+						    system("cls");
+						    printAsciiArt();
+                            TampilkanTopik(List,first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
+                            scanf("%d", &pilih);
+			                if (pilih == 0)
+			                {
+			                	break;
+							}
+                            List = CariNodebyPilihan(pilih, first);
+			                if (List == NULL)
+			                {
+			                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+			                	system("pause");
+			                	break;
+							}
+                            deleteTree(&(List->root));
+                            deleteFile(List);
+                            hapusTopik(List, &first);
+                            simpantopik(first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+						    system("pause");
                             break;
                         case 3:
                             // buat tree
                             system("cls");
-                            TampilkanTopik(List);
-                            printCentered("Masukkan topik yang anda inginkan: ", 12);
-                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
+                            printAsciiArt();
+                            TampilkanTopik(List,first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
                             scanf("%d", &pilih);
+			                if (pilih == 0)
+			                {
+			                	break;
+							}
                             List = CariNodebyPilihan(pilih, first);
+			                if (List == NULL)
+			                {
+			                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+			                	system("pause");
+			                	break;
+							}
                             if (List->root != NULL){
-                                printCentered("Mohon maaf Tree sudah terisi!", 15);
+                                printf("\t\t\t\t\t\t\t\t\t\t\tMohon maaf Tree sudah terisi!\n");
+                                printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                                 system("pause");
                                 break;
                             }
                             buatTree(List);
                             simpanTree(List);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 4:
-                            // menghapus_pertanyaan_jawaban
+                            // menghapus_pertanyaan_jawaban();
                             system("cls");
                             printAsciiArt();
                             TampilkanTopik(List,first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
                             printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
                             scanf("%d", &pilih);
+			                if (pilih == 0)
+			                {
+			                	break;
+							}
                             List = CariNodebyPilihan(pilih, first);
+			                if (List == NULL)
+			                {
+			                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+			                	system("pause");
+			                	break;
+							}
                             deleteTree(&(List->root));
                             deleteFile(List);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 5:
                             // buat node 
                             system("cls");
-                            TampilkanTopik(List);
-                            printCentered("Masukkan topik yang anda inginkan: ", 12);
-                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
+                            printAsciiArt();
+                            TampilkanTopik(List,first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
                             scanf("%d", &pilih);
+			                if (pilih == 0)
+			                {
+			                	break;
+							}
                             List = CariNodebyPilihan(pilih, first);
+			                if (List == NULL)
+			                {
+			                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+			                	system("pause");
+			                	break;
+							}
                             verifikasiJawaban(List->root);
                             buatTree(List);
                             kategoriJawaban(List->root);
                             simpanTree(List);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 6:
                             // edit tree
                             system("cls");
-                            TampilkanTopik(List);
-                            printCentered("Masukkan topik yang anda inginkan: ", 12);
-                            gotoxy(0, 13); // Pindah ke baris berikutnya untuk input
+                            printAsciiArt();
+                            TampilkanTopik(List,first);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
                             scanf("%d", &pilih);
+			                if (pilih == 0)
+			                {
+			                	break;
+							}
                             List = CariNodebyPilihan(pilih, first);
+			                if (List == NULL)
+			                {
+			                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+			                	system("pause");
+			                	break;
+							}
                             editTree(List);
                             simpanTree(List);
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 7:
@@ -129,15 +223,27 @@ int main()
                             system("cls");
                             printAsciiArt();
                             TampilkanTopik(List,first);
-                            printf("\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tketik 0 untuk kembali");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan topik yang anda inginkan: ");
                             scanf("%d", &pilih);
+			                if (pilih == 0)
+			                {
+			                	break;
+							}
                             List = CariNodebyPilihan(pilih, first);
+			                if (List == NULL)
+			                {
+			                	printf("\n\t\t\t\t\t\t\t\t\t\t\t");
+			                	system("pause");
+			                	break;
+							}
                             printTree(List->root);
-                            printTreeToFile(List->root, "Output.txt");
+                            printTreeToFile(List->root, "printTree.txt");
+                            printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                             system("pause");
                             break;
                         case 8:
-                            kembali = true; // Kembali ke menu utama
+                            kembali = true;
                             break;
                         default:
                             break;
@@ -146,12 +252,19 @@ int main()
                 break;
             }
             case 2:
-                // cara main
+//              cara main
+				system("cls");
+                printAsciiArt();
                 caramain();
+                printf("\n\t\t\t\t\t\t\t\t\t\t\t");
                 system("pause");
                 break;
             case 3:
-                printCentered("Terimakasih", 12);
+            	//exit
+            	system("cls");
+                printAsciiArt();
+                printf("\n\n");
+                printf("\n\t\t\t\t\t\t\t\t\t\t\t\t\tTerimakasih");
                 return 0;
             default:
                 break;

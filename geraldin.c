@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "global.h"
-
+#include "ikhsan.h"
 addressList search(addressList topik, char *judul) {
     addressList current = topik;
     while (current != NULL) {
@@ -14,20 +14,40 @@ addressList search(addressList topik, char *judul) {
     return NULL;
 }
 
+void simpantopik(addressList P) {
+    FILE *file = fopen("topik.txt", "w"); // Buka file untuk ditulis (overwrite)
+    if (file == NULL) {
+        printf("\t\t\t\t\t\t\t\t\t\t\tError: Gagal membuka file untuk ditulis.\n");
+        return;
+    }
+
+    addressList current = P;
+    while (current != NULL) {
+        fprintf(file, "%s\n", current->topik); // Menyimpan topik ke dalam file
+        current = current->next;
+    }
+
+    fclose(file);
+    printf("\t\t\t\t\t\t\t\t\t\t\tData berhasil disimpan ke dalam file topik.txt.\n");
+}
+
 void BuatTopik(addressList *P, addressList *first) {
     char judultopik[50];
-    printf("Masukkan judul topik baru: ");
+    *P = *first;
+    printf("\n\n\t\t\t\t\t\t\t\t\t\t\t----------------Buat Topik---------------\n");
+    printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan judul topik baru: ");
+    fflush(stdin);
     fgets(judultopik, sizeof(judultopik), stdin);
     judultopik[strcspn(judultopik, "\n")] = '\0'; // Remove newline character
 
     addressList newNode = (addressList)malloc(sizeof(listTopik));
     if (newNode == NULL) {
-        printf("Error: Alokasi memori gagal.\n");
+        printf("\t\t\t\t\t\t\t\t\t\t\tError: Alokasi memori gagal.\n");
         return;
     }
 
     if (search(*P, judultopik) != NULL) {
-        printf("Error: Topik '%s' sudah ada. Silakan masukkan nama topik yang berbeda.\n", judultopik);
+        printf("\t\t\t\t\t\t\t\t\t\t\tError: Topik '%s' sudah ada. Silakan masukkan nama topik yang berbeda.\n", judultopik);
         free(newNode);
         return;
     }
@@ -47,31 +67,13 @@ void BuatTopik(addressList *P, addressList *first) {
         temp->next = newNode;
     }
 
-    printf("Topik baru '%s' telah berhasil dibuat.\n", judultopik);
-    simpantopik(*P);
-}
-
-void simpantopik(addressList P) {
-    FILE *file = fopen("topik.txt", "w"); // Buka file untuk ditulis (overwrite)
-    if (file == NULL) {
-        printf("Error: Gagal membuka file untuk ditulis.\n");
-        return;
-    }
-
-    addressList current = P;
-    while (current != NULL) {
-        fprintf(file, "%s\n", current->topik); // Menyimpan topik ke dalam file
-        current = current->next;
-    }
-
-    fclose(file);
-    printf("Data berhasil disimpan ke dalam file topik.txt.\n");
+    printf("\n\t\t\t\t\t\t\t\t\t\t\tTopik baru '%s' telah berhasil dibuat.\n", judultopik);
 }
 
 void bacadarifile(addressList *P, addressList *first) {
     FILE *file = fopen("topik.txt", "r");
     if (file == NULL) {
-        printf("Error: Gagal membuka file untuk dibaca.\n");
+        printf("\t\t\t\t\t\t\t\t\t\t\tError: Gagal membuka file untuk dibaca.\n");
         return;
     }
 
@@ -80,7 +82,7 @@ void bacadarifile(addressList *P, addressList *first) {
         judultopik[strcspn(judultopik, "\n")] = '\0';
         addressList newNode = (addressList)malloc(sizeof(listTopik));
         if (newNode == NULL) {
-            printf("Error: Alokasi memori gagal.\n");
+            printf("\t\t\t\t\t\t\t\t\t\t\tError: Alokasi memori gagal.\n");
             fclose(file);
             return;
         }
@@ -104,57 +106,54 @@ void bacadarifile(addressList *P, addressList *first) {
 }
 
 // Fungsi untuk menampilkan daftar topik
-void TampilkanTopik(addressList P) {
-    int y = 8; // Mulai dari baris 5 atau sesuaikan sesuai keinginan
-
-    printCentered("Daftar Topik:", y);
-    y += 1; // Tambah jarak antar baris
-    addressList temp = P;
-    int i = 1;
+void TampilkanTopik(addressList P, addressList first) {
+    printf("\n\n\t\t\t\t\t\t\t\t\t\t\t----------------Daftar Topik---------------\n");
+    if (first == NULL) {
+        printf("\t\t\t\t\t\t\t\t\t\t\tDaftar topik kosong.\n");
+        return;
+    }
+    
+    addressList temp = first;
+    int nomor = 1;
     while (temp != NULL) {
-    	char buffer[100];
-        sprintf(buffer, "%d. %s", i, temp->topik);
-        printCentered(buffer, y);
-        y++;
+        printf("\t\t\t\t\t\t\t\t\t\t\t\t%d. %s\n", nomor, temp->topik);
         temp = temp->next;
-        i++;
+        nomor++;
     }
 }
 
-void hapusTopik(addressList *P, addressList *first) {
-    char judultopik[50];
-    printf("Masukkan judul topik yang ingin dihapus: ");
-    fgets(judultopik, sizeof(judultopik), stdin);
-    judultopik[strcspn(judultopik, "\n")] = '\0'; // Remove newline character
 
-    if (*P == NULL) {
-        printf("Error: Tidak ada topik yang tersedia.\n");
+
+void hapusTopik(addressList nodeToDelete, addressList *first) {
+    if (nodeToDelete == NULL) {
+        printf("Topik yang akan dihapus tidak ada.\n");
         return;
     }
 
-    addressList current = *P;
-    addressList previous = NULL;
-
-    while (current != NULL && strcmp(current->topik, judultopik) != 0) {
-        previous = current;
-        current = current->next;
-    }
-
-    if (current == NULL) {
-        printf("Error: Topik '%s' tidak ditemukan.\n", judultopik);
-        return;
-    }
-
-    if (previous == NULL) {
-        *P = current->next;
-        *first = *P;
+    // Jika node yang akan dihapus adalah node pertama
+    if (*first == nodeToDelete) {
+        *first = nodeToDelete->next;
     } else {
-        previous->next = current->next;
+        // Cari node sebelumnya
+        addressList prev = *first;
+        while (prev != NULL && prev->next != nodeToDelete) {
+            prev = prev->next;
+        }
+
+        // Jika node sebelumnya ditemukan, ubah pointer next-nya
+        if (prev != NULL) {
+            prev->next = nodeToDelete->next;
+        } else {
+            printf("\t\t\t\t\t\t\t\t\t\t\t\tTopik sebelumnya tidak ditemukan. Penghapusan gagal.\n");
+            return;
+        }
     }
 
-    free(current);
-    printf("Topik '%s' telah berhasil dihapus.\n", judultopik);
-
-    // Update the file after deletion
-    simpantopik(*first);
+    // Bebaskan memori dari node yang dihapus
+    free(nodeToDelete);
+    printf("\t\t\t\t\t\t\t\t\t\t\t\tTopik berhasil dihapus.\n");
 }
+
+
+
+

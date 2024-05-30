@@ -35,7 +35,6 @@ addressTree buatNodeTree(infotype data)
     return R;
 }
 
-
 addressQueueNode buatNodeQueue(addressTree nodeTree) 
 {
     // Mengalokasikan memori untuk sebuah node queue
@@ -60,7 +59,6 @@ addressQueueNode buatNodeQueue(addressTree nodeTree)
     return nodeBaru;
 }
 
-
 addressQueue buatQueue() 
 {
     // Mengalokasikan memori untuk sebuah queue
@@ -84,13 +82,11 @@ addressQueue buatQueue()
     return queue;
 }
 
-
 bool isEmpty(addressQueue queue) 
 {
     // Mengecek apakah queue kosong dengan memeriksa apakah pointer front adalah NULL
     return (queue->front == NULL);
 }
-
 
 void Enqueue(addressQueue queue, addressTree nodeTree) 
 {
@@ -110,7 +106,6 @@ void Enqueue(addressQueue queue, addressTree nodeTree)
         queue->rear = nodeBaru; // Perbarui rear ke node baru
     }
 }
-
 
 addressTree Dequeue(addressQueue queue) 
 {
@@ -146,7 +141,6 @@ addressTree Dequeue(addressQueue queue)
     // Mengembalikan data dari node yang dihapus
     return nodeTree;
 }
-
 
 addressTree insertNodeTree(addressTree rootTree, infotype data) 
 {
@@ -227,7 +221,6 @@ int maxDepth(addressTree rootTree)
     }
 }
 
-
 void kategoriJawaban(addressTree rootTree)
 {
     // Jika rootTree kosong, maka tidak perlu dilakukan pengecekan kategori jawaban
@@ -254,7 +247,6 @@ void kategoriJawaban(addressTree rootTree)
     kategoriJawaban(rootTree->left);
     kategoriJawaban(rootTree->right);
 }
-
 
 void printParent(addressTree rootTree, int *adaPertanyaan) 
 {
@@ -289,7 +281,7 @@ void printParent(addressTree rootTree, int *adaPertanyaan)
 		else 
 		{
             // Jika anak kiri kosong, cetak info node dan tandai bahwa masih ada pertanyaan
-            printf("\nValidasi saat ini: %s", temp->info);
+            printf("\n\t\t\t\t\t\t\t\t\t\t\tValidasi saat ini: %s", temp->info);
             *adaPertanyaan = 0;
             break;
         }
@@ -302,7 +294,7 @@ void printParent(addressTree rootTree, int *adaPertanyaan)
 		else 
 		{
             // Jika anak kanan kosong, cetak info node dan tandai bahwa masih ada pertanyaan
-            printf("\nValidasi saat ini: %s", temp->info);
+            printf("\n\t\t\t\t\t\t\t\t\t\t\tValidasi saat ini: %s", temp->info);
             *adaPertanyaan = 0;
             break;
         }
@@ -319,6 +311,67 @@ void printParent(addressTree rootTree, int *adaPertanyaan)
     free(queue);
 }
 
+bool periksaKompleksitasTopik(addressTree root) 
+{
+    // Deklarasi variabel
+    addressQueue queue;
+    addressTree temp;
+    addressQueueNode current, next;
+
+    // Inisialisasi variabel
+    queue = buatQueue();
+    i = 0;
+
+    // Memeriksa apakah root adalah NULL
+    if (root == NULL) 
+	{
+        free(queue); // Jika root kosong, bebaskan memori antrian dan kembalikan true
+        return true;
+    }
+
+    Enqueue(queue, root); // Menambahkan root ke dalam antrian
+
+    // Menggunakan BFS untuk memeriksa 32 node pertama
+    while (!isEmpty(queue) && i < 32) 
+	{
+        temp = Dequeue(queue); // Mengambil node dari antrian untuk diperiksa
+
+        if (temp->isJawaban) 
+		{
+            // Jika ditemukan jawaban dalam 32 node pertama, bebaskan memori antrian dan kembalikan false
+            while (!isEmpty(queue)) 
+			{
+                Dequeue(queue); // Mengosongkan antrian
+            }
+            free(queue);
+            return false;
+        }
+
+        // Menambahkan anak-anak dari node saat ini ke dalam antrian untuk diperiksa selanjutnya
+        if (temp->left != NULL) 
+		{
+            Enqueue(queue, temp->left);
+        }
+        if (temp->right != NULL) 
+		{
+            Enqueue(queue, temp->right);
+        }
+
+        i++; // Menambah jumlah node yang telah diperiksa
+    }
+
+    // Membersihkan memori dari elemen antrian yang tersisa
+    current = queue->front;
+    while (current != NULL) 
+	{
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    free(queue);
+
+    return true; // Semua node dari root sampai node ke-32 adalah pertanyaan
+}
 
 void buatTree(addressList P)
 {
@@ -330,7 +383,7 @@ void buatTree(addressList P)
     if (P->root == NULL) 
 	{
         // Meminta input pertama dari pengguna untuk membuat root pohon
-        printf("Gunakan tanda '?' jika merupakan sebuah pertanyaan.\nKetik 'SELESAI' ketika anda sudah selesai.\nValidasi awal: ");
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tGunakan tanda '?' jika merupakan sebuah pertanyaan.\n\t\t\t\t\t\t\t\t\t\t\tKetik 'SELESAI' ketika anda sudah selesai.\n\t\t\t\t\t\t\t\t\t\t\tValidasi awal: ");
         fflush(stdin);
         fgets(data, sizeof(data), stdin);
         data[strcspn(data, "\n")] = '\0'; // Menghapus karakter newline dari data yang dimasukkan
@@ -345,10 +398,10 @@ void buatTree(addressList P)
     }
     
     // Melakukan input data dan pembuatan pohon selama pengguna belum mengetik "SELESAI" dan kedalaman pohon masih kurang dari 6
-    while (strcmp(strupr(temp_data), "SELESAI") != 0 && maxDepth(P->root) < 6) 
+    while (strcmp(strupr(temp_data), "SELESAI") != 0) 
 	{
         // Menampilkan kedalaman pohon saat ini
-        printf("Kedalaman tree saat ini: %d (minimal memiliki kedalaman 6)\n", maxDepth(P->root));
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tKompleksitas topik saat ini: %d (minimal memiliki kompleksitas 6)\n", maxDepth(P->root));
         
         // Mencetak parent node yang belum memiliki anak
         printParent(P->root, &adaPertanyaan);
@@ -356,34 +409,33 @@ void buatTree(addressList P)
         // Jika tidak ada lagi pertanyaan yang bisa diisi, keluar dari loop
         if (adaPertanyaan == 1) 
 		{
-            printf("\nTree sudah tidak memiliki pertanyaan yang bisa diisi.");
-            // Jika kedalaman pohon masih kurang dari atau sama dengan 6, beritahu pengguna untuk menggunakan fitur Tambah Node Tree
-            if (maxDepth(P->root) <= 6) 
+            printf("\n\t\t\t\t\t\t\t\t\t\t\tTopik sudah tidak memiliki pertanyaan yang bisa diisi.\n");
+            // Jika kompleksitas tree masih kurang dari 6, beritahu pengguna untuk menggunakan fitur Tambah Node Tree
+            if (!periksaKompleksitasTopik(P->root)) 
 			{
-                printf("\nTree tidak memenuhi syarat memiliki kedalaman 6, silahkan anda gunakan fitur Tambah Node Tree.");
+		        printf("\n\t\t\t\t\t\t\t\t\t\t\tKompleksitas topik saat ini tidak direkomendasikan karena terdapat jawaban dalam 5 kompleksitas pertama.");
+		        printf("\n\t\t\t\t\t\t\t\t\t\t\tDisarankan untuk menggunakan fitur Tambah Pertanyaan dan Jawaban untuk menambahkan lebih banyak pertanyaan.\n");
             }
             break;
         }
         
         // Input jawaban jika pertanyaan sudah tersedia
-        printf("\nJika 'YA': ");
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tJika 'YA': ");
         fflush(stdin);
         fgets(data, sizeof(data), stdin);
         data[strcspn(data, "\n")] = '\0'; // Menghapus karakter newline dari data yang dimasukkan
         strcpy(temp_data, data); // Menyalin data ke variabel temp_data
         
-        // Jika pengguna mengetik "SELESAI", cek apakah kedalaman pohon sudah mencukupi
+        // Jika pengguna mengetik "SELESAI"
         if (strcmp(strupr(temp_data), "SELESAI") == 0) 
 		{
-            if (maxDepth(P->root) <= 6) 
+			// Jika kompleksitas tree masih kurang dari 6, beritahu pengguna untuk menggunakan fitur Tambah Node Tree
+            if (!periksaKompleksitasTopik(P->root)) 
 			{
-                printf("\nAnda belum memenuhi syarat memiliki kedalaman 6.\n");
-                continue;
-            } 
-			else 
-			{
-                break; // Jika kedalaman sudah mencukupi, keluar dari loop
+		        printf("\n\t\t\t\t\t\t\t\t\t\t\tKompleksitas topik saat ini tidak direkomendasikan karena terdapat jawaban dalam 5 kompleksitas pertama.");
+		        printf("\n\t\t\t\t\t\t\t\t\t\t\tDisarankan untuk menggunakan fitur Tambah Pertanyaan dan Jawaban untuk menambahkan lebih banyak pertanyaan.\n");
             }
+            break;
         }
         
         // Memasukkan jawaban "YA" ke dalam pohon dan menetapkan apakah jawaban "YA" itu merupakan kategori jawaban
@@ -391,7 +443,7 @@ void buatTree(addressList P)
         kategoriJawaban(P->root);
         
         // Input jawaban jika pertanyaan sudah tersedia
-        printf("Jika 'TIDAK': ");
+        printf("\t\t\t\t\t\t\t\t\t\t\tJika 'TIDAK': ");
         fflush(stdin);
         fgets(data, sizeof(data), stdin);
         data[strcspn(data, "\n")] = '\0'; // Menghapus karakter newline dari data yang dimasukkan
@@ -400,7 +452,7 @@ void buatTree(addressList P)
         // Jika pengguna mengetik "SELESAI", beritahu pengguna untuk mengisi kondisi jika "TIDAK"
         if (strcmp(strupr(temp_data), "SELESAI") == 0) 
 		{
-            printf("\nAnda belum mengisi kondisi jika 'TIDAK'\n");
+            printf("\n\t\t\t\t\t\t\t\t\t\t\tAnda belum mengisi kondisi jika 'TIDAK'\n");
             continue;
         }
         
@@ -438,7 +490,8 @@ void simpanTree(addressList P)
     FILE *file = fopen(filepath, "w");
     if (file == NULL) 
 	{
-        printf("Gagal membuat file.\n");
+		system("cls");
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tGagal membuat file.\n");
         exit(1);
     }
 
@@ -503,73 +556,93 @@ void bacaFileTree(addressList P)
     fclose(file);
 }
 
-void traversalInOrder(addressTree rootTree) {
-    if (rootTree != NULL) {
-        traversalInOrder(rootTree->left);
-        printf("%s ", rootTree->info);
-        traversalInOrder(rootTree->right);
-    }
-}
-
-void verifikasiJawaban(addressTree rootTree) {
+void verifikasiJawaban(addressTree rootTree) 
+{
     // Deklarasi variabel
-    char pilihanJawaban[2];
+    char jawabanYangDicari[100];
+    char pilihan[2];
     char *tandaTanya;
     bool sudahValid;
-    infotype tempInfo;
-    addressQueue queue = buatQueue();
+    bool jawabanDitemukan = false;
+    char tempInfo[100];
+    addressQueue queue;
     addressTree temp;
 
-    // Memasukkan rootTree ke dalam antrian
+    // Menanyakan kepada pengguna apakah ingin mengubah jawaban menjadi pertanyaan
+    printf("\n\t\t\t\t\t\t\t\t\t\t\tApakah anda ingin mengubah jawaban menjadi pertanyaan? (y/n): ");
+    scanf("%s", pilihan);
+
+    // Jika pengguna tidak ingin melakukan pengubahan
+    if (pilihan[0] != 'y' && pilihan[0] != 'Y') 
+	{
+        return;
+    }
+
+    // Meminta input dari pengguna untuk jawaban yang ingin diedit
+    printf("\n\t\t\t\t\t\t\t\t\t\t\tMasukkan jawaban yang ingin diedit: ");
+    fflush(stdin);
+    fgets(jawabanYangDicari, sizeof(jawabanYangDicari), stdin);
+    jawabanYangDicari[strcspn(jawabanYangDicari, "\n")] = '\0';
+
+    // Inisialisasi antrian dan memasukkan rootTree ke dalam antrian
+    queue = buatQueue();
     Enqueue(queue, rootTree);
 
     // Melakukan pengulangan selama antrian tidak kosong
-    while (!isEmpty(queue)) {
+    while (!isEmpty(queue)) 
+	{
         temp = Dequeue(queue); // Menghapus elemen pertama dari antrian
 
         // Memeriksa dan memasukkan anak kiri dan kanan dari node saat ini ke dalam antrian
-        if (temp->left != NULL) {
+        if (temp->left != NULL) 
+		{
             Enqueue(queue, temp->left);
         }
-        if (temp->right != NULL) {
+        if (temp->right != NULL) 
+		{
             Enqueue(queue, temp->right);
         }
 
-        // Jika node saat ini merupakan jawaban
-        if (temp->isJawaban == true) {
+        // Jika node saat ini merupakan jawaban yang dicari
+        if (temp->isJawaban == true && strcmp(temp->info, jawabanYangDicari) == 0) 
+		{
+            jawabanDitemukan = true; // Menandakan bahwa jawaban ditemukan
             sudahValid = false; // Inisialisasi status validasi
-            printf("\nKetik 'SELESAI' ketika anda sudah selesai.");
-            printf("\nJawaban saat ini: %s", temp->info);
-            printf("\nApakah anda ingin menyimpan ini sebagai jawaban? (y/n): ");
-            scanf("%s", pilihanJawaban);
 
-            // Jika jawaban tidak disimpan
-            if (pilihanJawaban[0] == 'n' || pilihanJawaban[0] == 'N') {
-                do {
-                    printf("Silahkan anda tulis sebuah pertanyaan (Gunakan tanda '?'): ");
-                    fflush(stdin);
-                    fgets(tempInfo, sizeof(tempInfo), stdin);
-                    tempInfo[strcspn(tempInfo, "\n")] = '\0';
-                    tandaTanya = strchr(tempInfo, '?');
-                    if (tandaTanya == NULL) {
-                        printf("\nPertanyaan tidak valid, mohon input ulang kembali.\n\n");
-                    } else {
-                        strcpy(temp->info, tempInfo); // Mengganti info node dengan pertanyaan baru
-                        temp->isJawaban = false; // Mengubah status node menjadi bukan jawaban
-                        sudahValid = true; // Mengubah status validasi menjadi true
-                    }
-                } while (!sudahValid); // Melakukan pengulangan hingga pertanyaan valid
-            } else if (pilihanJawaban[0] == 'y' || pilihanJawaban[0] == 'Y') {
-                continue; // Melanjutkan ke node berikutnya jika jawaban disimpan
-            } else if (strcmp(strupr(pilihanJawaban), "SELESAI") == 0) {
-                break; // Menghentikan verifikasi jika user memilih selesai
-            }
+            // Meminta input pertanyaan baru
+            do 
+			{
+                printf("\n\t\t\t\t\t\t\t\t\t\t\tSilahkan anda tulis sebuah pertanyaan (Gunakan tanda '?'): ");
+                fflush(stdin);
+                fgets(tempInfo, sizeof(tempInfo), stdin);
+                tempInfo[strcspn(tempInfo, "\n")] = '\0';
+                tandaTanya = strchr(tempInfo, '?');
+                if (tandaTanya == NULL) 
+				{
+                    printf("\n\t\t\t\t\t\t\t\t\t\t\tPertanyaan tidak valid, mohon input ulang kembali.\n\n");
+                }
+				else 
+				{
+                    strcpy(temp->info, tempInfo); // Mengganti info node dengan pertanyaan baru
+                    temp->isJawaban = false; // Mengubah status node menjadi bukan jawaban
+                    sudahValid = true; // Mengubah status validasi menjadi true
+                }
+            } while (!sudahValid); // Melakukan pengulangan hingga pertanyaan valid
+
+            break; // Menghentikan pencarian setelah jawaban ditemukan dan diedit
         }
+    }
+
+    // Jika jawaban tidak ditemukan
+    if (!jawabanDitemukan) 
+	{
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tJawaban yang dicari tidak ditemukan dalam tree.\n");
     }
 
     // Membersihkan memori dari elemen antrian
     addressQueueNode current = queue->front;
-    while (current != NULL) {
+    while (current != NULL) 
+	{
         addressQueueNode next = current->next;
         free(current);
         current = next;

@@ -101,8 +101,6 @@ void printTree(addressTree rootTree) {
     printTreeHelperCLI(rootTree->right, 1, 1, path);
 }
 
-
-
 void deleteTree(addressTree *rootTree) {
     if (*rootTree != NULL) {
         // Hapus anak kiri
@@ -113,6 +111,20 @@ void deleteTree(addressTree *rootTree) {
         free(*rootTree);
         // Atur referensi ke node saat ini menjadi NULL
         *rootTree = NULL;
+    }
+}
+
+void deleteFile(addressList P) {
+    // Buat path file yang sesuai dengan nama topik
+    char folder[] = "Topik";
+    char filepath[100];
+    sprintf(filepath, "%s/%s.txt", folder, P->topik);
+
+    // Hapus file yang sesuai dengan path
+    if (remove(filepath) == 0) {
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tPertanyaan dan Jawaban berhasil dihapus.\n", filepath);
+    } else {
+        printf("\n\t\t\t\t\t\t\t\t\t\t\tGagal menghapus pertanyaan dan jawaban.\n", filepath);
     }
 }
 
@@ -143,6 +155,7 @@ void printAsciiArt() {
         printCentered(asciiArt[i], startY + i);
     }
 }
+
 
 void printAsciiBanner() {
     const char *akinator_art[] = {
@@ -202,3 +215,5 @@ void printAsciiBanner() {
     }
 
 }
+
+

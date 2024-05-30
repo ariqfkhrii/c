@@ -1,3 +1,2 @@
-Hewan
-Buah
-sepeda
+hewan
+minuman

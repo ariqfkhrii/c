@@ -2,18 +2,20 @@
 #define ariq_H
 #include "global.h"
 
-/* Variabel untuk menunjuk sebuah struktur queue */
+/* Variabel untuk menunjuk sebuah node dalam queue dan struktur queue */
 typedef struct QueueNode *addressQueueNode;
 typedef struct Queue *addressQueue;
 
 // Struktur data noda yeng ada pada queue
-typedef struct QueueNode {
+typedef struct QueueNode 
+{
     addressTree data;
     addressQueueNode next;
 } QueueNode;
 
 // Struktur queue
-typedef struct Queue {
+typedef struct Queue 
+{
     addressQueueNode front, rear;
 } Queue;
 
@@ -71,6 +73,7 @@ addressTree insertNodeTree(addressTree rootTree, infotype data);
    Tujuan: Memasukkan node baru ke dalam pohon.
    I.S   : Pohon mungkin kosong atau tidak kosong.
    F.S   : Jika pohon kosong, maka node baru akan menjadi root. Jika pohon tidak kosong, maka node baru akan ditambahkan sebagai anak kiri atau kanan dari node yang memiliki anak kosong pertama.
+   NOTE	 : Algoritma ini diambil dari website 'www.geeksforgeeks.org' yang kemudian diubah sesuai kebutuhan
 */
 
 // Fungsi untuk menghitung kedalaman maksimum dari pohon
@@ -79,6 +82,7 @@ int maxDepth(addressTree rootTree);
    Tujuan: Menghitung kedalaman maksimum dari pohon.
    I.S   : Pohon mungkin kosong atau tidak kosong.
    F.S   : Mengembalikan nilai integer yang menyatakan kedalaman maksimum dari pohon.
+   NOTE	 : Algoritma ini sepenuhnya diambil dari website 'www.geeksforgeeks.org'
 */
 
 // Fungsi untuk mengkategorikan apakah suatu node merupakan jawaban atau bukan
@@ -95,6 +99,14 @@ void printParent(addressTree rootTree, int *adaPertanyaan);
    Tujuan: Mencetak informasi dari parent node yang belum memiliki anak.
    I.S   : Pohon mungkin kosong atau tidak kosong.
    F.S   : Jika ada parent node yang belum memiliki anak, informasi dari parent node tersebut dicetak dan mengatur adaPertanyaan r ke 0.
+*/
+
+// Fungsi untuk memeriksa kompleksitas topik berdasarkan 32 node pertama dalam pohon.
+bool periksaKompleksitasTopik(addressTree root);
+/* 
+   Tujuan: Memastikan bahwa dalam 32 node pertama dari pohon, tidak ada jawaban yang ditemukan.
+   I.S   : Pohon tidak kosong.
+   F.S   : Mengembalikan nilai true jika semua node dari root sampai node ke-32 adalah pertanyaan, dan false jika terdapat jawaban di antara 32 node pertama.
 */
 
 // Fungsi untuk membangun pohon berdasarkan input pengguna
@@ -119,14 +131,6 @@ void bacaFileTree(addressList P);
    Tujuan: Membaca struktur pohon dari file.
    I.S   : File mungkin kosong atau berisi data pohon.
    F.S   : Struktur pohon akan dibaca dari file dan dimasukkan ke dalam pohon.
-*/
-
-// Fungsi untuk melakukan traversal in-order pada pohon
-void traversalInOrder(addressTree rootTree);
-/* 
-   Tujuan: Melakukan traversal in-order pada pohon.
-   I.S   : Pohon mungkin kosong atau tidak kosong.
-   F.S   : Informasi dari setiap node dalam pohon akan dicetak secara terurut berdasarkan traversal in-order.
 */
 
 // Fungsi untuk melakukan verifikasi jawaban yang telah dibuat

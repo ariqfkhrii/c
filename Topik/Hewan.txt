@@ -1,3 +1,132 @@
-4?
-sapi
-ayam
+Apakah hewan ini termasuk ke Vertebrata (memiliki tulang belakang)?
+Apakah hewan ini termasuk Mamalia?
+Apakah hewan ini hidup di darat?
+Apakah hewan ini memakan daging?
+Apakah hewan ini dapat hidup di darat?
+Apakah hewan ini memiliki Eksoskeleton (kerangka luar)?
+Apakah hewan ini memiliki cangkang yang keras?
+Apakah hewan ini Nokturnal (aktif di malam hari)?
+Apakah hewan ini termasuk hewan ternak?
+Apakah hewan ini memiliki sisik?
+Apakah hewan ini hidup di air tawar?
+Apakah hewan ini punya lebih dari 6 kaki?
+Apakah hewan ini memiliki cangkang?
+Apakah hewan ini memiliki bentuk cangkang yang spiral?
+Apakah hewan ini bertubuh lunak?
+Apakah hewan ini termasuk ke keluarga anjing (Canidae)?
+Apakah habitat hewan ini berada di padang rumput?
+Apakah hewan ini dapat digunakan sebagai hewan pengangkut barang/muatan?
+Apakah hewan ini memiliki kantong (Marsupial)?
+Apakah hewan ini memiliki cangkang?
+Apakah hewan ini memiliki sayap?
+Apakah hewan ini berbentuk pipih?
+Apakah hewan ini bertulang sejati?
+Apakah hewan ini berkaki 8 (Arachnida)?
+Apakah hewan ini bisa terbang?
+Apakah hewan ini memiliki cangkang yang tipis?
+Apakah hewan ini memiliki segmen/ruas pada tubuhnya?
+Apakah hewan ini memiliki tentakel?
+Apakah hewan ini dapat bergerak dengan cepat?
+Apakah hewan ini memiliki 8 lengan?
+Apakah hewan ini berbentuk silinder?
+Apakah hewan ini berburu secara berkelompok?
+Apakah hewan ini mahir memanjat pohon?
+Apakah hewan ini memiliki surai (rambut lebat di sekitar kepala)?
+Apakah habitat hewan ini berada di kutub utara?
+Apakah hewan ini memiliki punuk (tonjolan lemak pada bagian punggung)?
+Apakah bulu hewan ini dapat dimanfaatkan sebagai bahan baku tekstil?
+Apakah hewan ini tinggal di pohon?
+apakah hewan ini terkenal dengan sebutan ekor cincin?
+apakah hewan ini memiliki kaki yang menyerupai sirip?
+apakah hewan ini dapat memutuskan ekornya?
+Apakah hewan ini Nokturnal (aktif di malam hari)?
+Apakah hewan ini memiliki ekor?
+Apakah hewan ini memiliki sisik?
+Apakah hewan ini memiliki sungut (indra perasa yang menyerupai kumis)?
+Apakah tubuh hewan ini berukuran kecil?
+Apakah hewan ini memiliki gigi yang tajam?
+Apakah hewan ini memiliki capit?
+Apakah hewan ini memiliki bisa?
+Apakah sayap hewan ini berwarna-warni?
+Apakah hewan ini hidup secara berkoloni?
+Siput
+Apakah warna cangkang hewan ini bervariasi?
+Apakah hewan ini menghisap darah?
+Apakah hewan ini bisa beregenerasi?
+Apakah hewan ini berukuran lebih dari 30 cm?
+Apakah ukuran hewan ini dapat mencapai 50 cm?
+Apakah hewan ini memiliki tinju yang kuat?
+Apakah hewan biasanya bersembunyi di pasir?
+Apakah hewan ini bisa mengubah warna tubuhnya?
+Apakah hewan ini memiliki tentakel yang panjang?
+Apakah hewan ini memiliki banyak duri di tubuhnya?
+Apakah hewan ini Transparan?
+Serigala
+Rubah
+Musang
+Kucing
+Singa
+Cheetah
+Beruang Kutub
+Anjing
+Unta
+Kuda
+Domba
+Apakah hewan ini dimanfaatkan susunya?
+Koala
+Kangguru
+Lemur
+Apakah hewan ini memiliki warna hitam dan putih?
+Penyu
+Kura-Kura
+Cicak
+Ular
+Burung Hantu
+Apakah hewan ini bisa terbang?
+Salamander
+Kodok
+Ikan Mas
+Ikan Patin
+Ikan Lele
+Ikan Gabus
+Ikan Teri
+Ikan Tuna
+Ikan Hiu
+Ikan Pari
+Kalajengking
+Laba-Laba
+Kelabang
+Kaki Seribu
+Kupu-Kupu
+Apakah hewan ini memiliki sengat beracun?
+Semut
+Kumbang Kotoran
+Keong 
+Bekicot
+Lintah
+Cacing Tanah
+Cacing Planaria
+Slug
+Nautilus
+Siput Laut
+Triton
+Conus
+Lobster Mantis
+Udang
+Kerang
+Abalone
+Gurita
+Cumi-Cumi
+Ubur-Ubur
+Anemon Laut
+Babi Laut
+Bintang Laut
+Salp
+Spons Laut
+Sapi Babi
+Zebra
+Orangutan
+Elang
+Penguin
+Lebah
+Capung
